@@ -34,6 +34,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.spi.DefaultElementVisitor;
 import com.google.inject.spi.Element;
+import com.google.inject.spi.InstanceBinding;
 
 /**
  * @since 6.0
@@ -95,7 +96,13 @@ public final class Rocoto
                             propertyKey = ( (javax.inject.Named) bindingKey.getAnnotation() ).value();
                         }
 
-                        String propertyValue = (String) binding.getProvider().get();
+
+                        String propertyValue;
+
+                        if (binding instanceof InstanceBinding)
+                            propertyValue = (String) ( (InstanceBinding<?>) binding ).getInstance();
+                        else
+                            propertyValue = (String) binding.getProvider().get();
 
                         variablesMap.put( propertyKey, propertyValue );
                     }
